@@ -14,7 +14,7 @@ MonoBehaviour:
   id: cruelWordSearchModule
   title: Cruel Word Search
   author: eXish
-  description: "Search for a word in the grid where all letters in the word are adjacent
+  description: "Find a word in the grid where all letters in the word are adjacent
     and the grid wraps around.\n\nBased on the original Word Search module\r:\nhttps://steamcommunity.com/sharedfiles/filedetails/?id=814168200\n\nHTML:
     https://ktane.timwi.de/HTML/Cruel%20Word%20Search.html\nPDF: https://ktane.timwi.de/PDF/Cruel%20Word%20Search.pdf\n\nCruel
     Word Search (cruelWordSearchModule) v1.0.0\nModule and Concept by eXish\nTwitch
