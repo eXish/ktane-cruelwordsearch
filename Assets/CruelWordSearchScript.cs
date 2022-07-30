@@ -83,25 +83,26 @@ public class CruelWordSearchScript : MonoBehaviour {
                 }
             }
             List<int> visited = new List<int>();
-            int ct = 0;
+            List<int> counts = new List<int>();
             bool dealWithMyProblems = false;
-            bool dealWithMyProblems2 = false;
             while (queue.Count > 0)
             {
                 int curItem = queue[0];
                 int curIndex = queueIndexes[0];
                 if (dealWithMyProblems)
                 {
-                    for (int k = 0; k < ct; k++)
-                        visited.RemoveAt(visited.Count - 1);
-                    ct = 0;
+                    if (counts.Count > 0)
+                    {
+                        for (int k = 0; k < counts.Last(); k++)
+                            visited.RemoveAt(visited.Count - 1);
+                        counts.RemoveAt(counts.Count - 1);
+                    }
                     dealWithMyProblems = false;
-                    dealWithMyProblems2 = false;
                 }
                 if (curIndex == 0)
                     visited.Clear();
-                if (dealWithMyProblems2)
-                    ct++;
+                if (counts.Count > 0)
+                    counts[counts.Count - 1]++;
                 visited.Add(queue[0]);
                 queue.RemoveAt(0);
                 queueIndexes.RemoveAt(0);
@@ -125,7 +126,7 @@ public class CruelWordSearchScript : MonoBehaviour {
                     if (positions.Count == 0)
                         dealWithMyProblems = true;
                     else if (positions.Count > 1)
-                        dealWithMyProblems2 = true;
+                        counts.Add(0);
                 }
             }
         }
