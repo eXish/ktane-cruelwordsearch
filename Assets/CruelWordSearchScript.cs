@@ -32,7 +32,6 @@ public class CruelWordSearchScript : MonoBehaviour {
     void Awake()
     {
         moduleId = moduleIdCounter++;
-        moduleSolved = false;
         foreach (KMSelectable obj in buttons)
         {
             KMSelectable pressed = obj;
@@ -83,10 +82,27 @@ public class CruelWordSearchScript : MonoBehaviour {
                     queueIndexes.Add(0);
                 }
             }
+            List<int> visited = new List<int>();
+            int ct = 0;
+            bool dealWithMyProblems = false;
+            bool dealWithMyProblems2 = false;
             while (queue.Count > 0)
             {
                 int curItem = queue[0];
                 int curIndex = queueIndexes[0];
+                if (dealWithMyProblems)
+                {
+                    for (int k = 0; k < ct; k++)
+                        visited.RemoveAt(visited.Count - 1);
+                    ct = 0;
+                    dealWithMyProblems = false;
+                    dealWithMyProblems2 = false;
+                }
+                if (curIndex == 0)
+                    visited.Clear();
+                if (dealWithMyProblems2)
+                    ct++;
+                visited.Add(queue[0]);
                 queue.RemoveAt(0);
                 queueIndexes.RemoveAt(0);
                 if (curIndex == words[i].Length - 1 && word != i)
@@ -100,17 +116,21 @@ public class CruelWordSearchScript : MonoBehaviour {
                 }
                 else
                 {
-                    List<int> positions = CheckPositions(curItem, words[i][curIndex + 1]);
+                    List<int> positions = CheckPositions(curItem, words[i][curIndex + 1], visited);
                     for (int j = 0; j < positions.Count; j++)
                     {
                         queue.Insert(0, positions[j]);
                         queueIndexes.Insert(0, curIndex + 1);
                     }
+                    if (positions.Count == 0)
+                        dealWithMyProblems = true;
+                    else if (positions.Count > 1)
+                        dealWithMyProblems2 = true;
                 }
             }
         }
         Debug.LogFormat("[Cruel Word Search #{0}] Grid:", moduleId);
-        for (int i = 0; i < grid.Length; i+=6)
+        for (int i = 0; i < grid.Length; i += 6)
             Debug.LogFormat("[Cruel Word Search #{0}] {1}{2}{3}{4}{5}{6}", moduleId, grid[i], grid[i + 1], grid[i + 2], grid[i + 3], grid[i + 4], grid[i + 5]);
         if (activated)
             Activate();
@@ -208,13 +228,13 @@ public class CruelWordSearchScript : MonoBehaviour {
         return positions;
     }
 
-    List<int> CheckPositions(int curPos, char letter)
+    List<int> CheckPositions(int curPos, char letter, List<int> seenPositions)
     {
         List<int> positions = new List<int>();
         int[] offsets = GetOffsets(curPos);
         for (int i = 0; i < 8; i++)
         {
-            if (grid[curPos + offsets[i]] == letter)
+            if (grid[curPos + offsets[i]] == letter && !seenPositions.Contains(curPos + offsets[i]))
                 positions.Add(curPos + offsets[i]);
         }
         return positions;
