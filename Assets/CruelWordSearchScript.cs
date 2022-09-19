@@ -111,7 +111,10 @@ public class CruelWordSearchScript : MonoBehaviour {
                 else if (curIndex == words[i].Length - 1 && word == i)
                 {
                     if (!firstHit)
+                    {
                         firstHit = true;
+                        dealWithMyProblems = true;
+                    }
                     else
                         goto redo;
                 }
