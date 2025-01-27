@@ -129,7 +129,10 @@ public class CruelWordSearchScript : MonoBehaviour {
                     if (positions.Count == 0)
                         dealWithMyProblems = true;
                     else if (positions.Count > 1)
-                        counts.Add(0);
+                    {
+                        for (int k = 0; k < positions.Count - 1; k++)
+                            counts.Add(0);
+                    }
                 }
             }
         }
